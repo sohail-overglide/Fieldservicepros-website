@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { getSupabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,16 +12,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const db = getDb();
-
+    const supabase = getSupabase();
     if (userType === "hiring") {
-      db.prepare(
-        "INSERT INTO client_portal (first_name, last_name, email, company_name) VALUES (?, ?, ?, ?)"
-      ).run(firstName.trim(), lastName.trim(), email.trim(), (company || "").trim());
+      const { error } = await supabase.from("client_portal").insert({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim(),
+        company_name: (company || "").trim(),
+      });
+      if (error) throw error;
     } else {
-      db.prepare(
-        "INSERT INTO candidates_portal (first_name, last_name, email) VALUES (?, ?, ?)"
-      ).run(firstName.trim(), lastName.trim(), email.trim());
+      const { error } = await supabase.from("candidates_portal").insert({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        email: email.trim(),
+      });
+      if (error) throw error;
     }
 
     return NextResponse.json({ success: true });

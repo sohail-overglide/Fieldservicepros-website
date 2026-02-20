@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { getSupabase } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const db = getDb();
-    const candidates = db
-      .prepare("SELECT * FROM candidates_portal ORDER BY created_at DESC")
-      .all();
-    return NextResponse.json({ candidates });
+    const supabase = getSupabase();
+    const { data: candidates, error } = await supabase
+      .from("candidates_portal")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return NextResponse.json({ candidates: candidates ?? [] });
   } catch (error) {
     console.error("Candidates fetch error:", error);
     return NextResponse.json(

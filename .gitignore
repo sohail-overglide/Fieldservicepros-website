@@ -24,7 +24,7 @@
 .DS_Store
 *.pem
 
-# local database (SQLite)
+# local data (e.g. SQLite if ever used locally)
 /data/
 
 # debug

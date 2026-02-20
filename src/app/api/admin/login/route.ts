@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDb, JWT_SECRET } from "@/lib/db";
+import { getSupabase, JWT_SECRET } from "@/lib/supabase";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 
@@ -14,14 +14,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const db = getDb();
-    const admin = db
-      .prepare("SELECT * FROM admin_users WHERE username = ?")
-      .get(username) as
-      | { id: number; username: string; password_hash: string }
-      | undefined;
+    const supabase = getSupabase();
+    const { data: admin, error } = await supabase
+      .from("admin_users")
+      .select("id, username, password_hash")
+      .eq("username", username)
+      .single();
 
-    if (!admin || !bcrypt.compareSync(password, admin.password_hash)) {
+    if (error || !admin || !bcrypt.compareSync(password, admin.password_hash)) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }

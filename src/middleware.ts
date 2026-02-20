@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const JWT_SECRET = new TextEncoder().encode(
-  "fieldservice-admin-jwt-secret-2024"
+  process.env.ADMIN_JWT_SECRET || "fieldservice-admin-jwt-secret-2024"
 );
 
 export async function middleware(req: NextRequest) {
