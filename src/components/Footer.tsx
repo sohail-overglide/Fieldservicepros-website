@@ -44,20 +44,15 @@ const footerColumns: FooterColumn[] = [
   {
     title: "Company",
     links: [
-      { label: "About", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Careers", href: "#" },
-      { label: "Press", href: "#" },
-      { label: "Contact", href: "#contact" },
+      { label: "Contact", href: "mailto:info@fieldservicepros.com" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Cookie Policy", href: "#" },
-      { label: "EEOC Compliance", href: "#" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms of Service", href: "/terms-of-service" },
+      { label: "Cookie Policy", href: "/cookie-policy" },
     ],
   },
 ];
@@ -71,10 +66,26 @@ const FooterEarlyAccessForm = () => {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setError("");
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/early-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userType, firstName, lastName, email, company }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+      setIsSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleReset = () => {
@@ -83,6 +94,7 @@ const FooterEarlyAccessForm = () => {
     setLastName("");
     setEmail("");
     setCompany("");
+    setError("");
   };
 
   return (
@@ -271,14 +283,24 @@ const FooterEarlyAccessForm = () => {
                     )}
                   </AnimatePresence>
 
+                  {error && (
+                    <motion.p
+                      layout
+                      className="rounded-lg bg-red-50 px-4 py-2.5 text-xs text-red-600"
+                    >
+                      {error}
+                    </motion.p>
+                  )}
+
                   <motion.div layout>
                     <button
                       type="submit"
-                      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-brand-primary py-3 text-sm font-medium text-white transition-colors hover:bg-brand-primary-dark"
+                      disabled={isLoading}
+                      className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-brand-primary py-3 text-sm font-medium text-white transition-colors hover:bg-brand-primary-dark disabled:opacity-60"
                       aria-label="Get early access"
                     >
-                      Get Early Access
-                      <ArrowRight size={16} />
+                      {isLoading ? "Submitting..." : "Get Early Access"}
+                      {!isLoading && <ArrowRight size={16} />}
                     </button>
                   </motion.div>
 
@@ -359,29 +381,6 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} FieldService Pros. All rights
             reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <a
-              href="#"
-              className="text-xs text-text-secondary transition-colors hover:text-brand-black"
-              aria-label="Visit our X/Twitter page"
-            >
-              X
-            </a>
-            <a
-              href="#"
-              className="text-xs text-text-secondary transition-colors hover:text-brand-black"
-              aria-label="Visit our LinkedIn page"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="#"
-              className="text-xs text-text-secondary transition-colors hover:text-brand-black"
-              aria-label="Visit our GitHub page"
-            >
-              GitHub
-            </a>
-          </div>
         </div>
       </div>
     </footer>

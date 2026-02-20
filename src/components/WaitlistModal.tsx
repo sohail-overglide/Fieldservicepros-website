@@ -16,7 +16,10 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Close on Escape key
   const handleKeyDown = useCallback(
@@ -37,17 +40,31 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
     };
   }, [isOpen, handleKeyDown]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate submission
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      onClose();
-    }, 2000);
+    setError("");
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/early-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userType, firstName, lastName, email, company }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setCompany("");
+        onClose();
+      }, 2000);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -201,6 +218,31 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
                   />
                 </div>
 
+                {userType === "hiring" && (
+                  <div>
+                    <label
+                      htmlFor="modal-company"
+                      className="mb-1.5 block text-xs font-medium text-text-secondary"
+                    >
+                      Company Name
+                    </label>
+                    <input
+                      id="modal-company"
+                      type="text"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Acme Health Systems"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors placeholder:text-gray-400 focus:border-brand-black"
+                    />
+                  </div>
+                )}
+
+                {error && (
+                  <p className="rounded-lg bg-red-50 px-4 py-2.5 text-xs text-red-600">
+                    {error}
+                  </p>
+                )}
+
                 {/* Context-aware subtitle */}
                 <p className="text-xs text-text-secondary">
                   {userType === "hiring"
@@ -210,10 +252,11 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
 
                 <button
                   type="submit"
-                  className="w-full cursor-pointer rounded-full bg-brand-primary py-3 text-sm font-medium text-white transition-colors hover:bg-brand-primary-dark"
+                  disabled={isLoading}
+                  className="w-full cursor-pointer rounded-full bg-brand-primary py-3 text-sm font-medium text-white transition-colors hover:bg-brand-primary-dark disabled:opacity-60"
                   aria-label="Submit waitlist form"
                 >
-                  Get Early Access
+                  {isLoading ? "Submitting..." : "Get Early Access"}
                 </button>
               </form>
             )}
