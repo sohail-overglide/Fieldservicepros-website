@@ -43,7 +43,9 @@ const Navbar = ({ onOpenWaitlist }: NavbarProps) => {
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 md:flex">
           <a
-            href="mailto:info@fieldservicepros.com"
+            href="https://mail.google.com/mail/?view=cm&to=info@fieldservicepros.com&su=Contact%20Sales%20Inquiry"
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-brand-black transition-colors hover:bg-gray-50"
             aria-label="Contact sales"
           >
@@ -81,7 +83,9 @@ const Navbar = ({ onOpenWaitlist }: NavbarProps) => {
           >
             <div className="flex flex-col gap-4">
               <a
-                href="mailto:info@fieldservicepros.com"
+                href="https://mail.google.com/mail/?view=cm&to=info@fieldservicepros.com&su=Contact%20Sales%20Inquiry"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full border border-gray-200 px-5 py-3 text-center text-sm font-medium text-brand-black transition-colors hover:bg-gray-50"
                 aria-label="Contact sales"
               >

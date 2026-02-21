@@ -44,7 +44,7 @@ const footerColumns: FooterColumn[] = [
   {
     title: "Company",
     links: [
-      { label: "Contact", href: "mailto:info@fieldservicepros.com" },
+      { label: "Contact", href: "https://mail.google.com/mail/?view=cm&to=info@fieldservicepros.com&su=Contact%20Inquiry" },
     ],
   },
   {
@@ -363,6 +363,7 @@ const Footer = () => {
                   <li key={link.label}>
                     <a
                       href={link.href}
+                      {...(link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       className="text-sm text-text-secondary transition-colors hover:text-brand-black"
                       aria-label={link.label}
                     >

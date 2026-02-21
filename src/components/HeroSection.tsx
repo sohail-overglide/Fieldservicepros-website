@@ -34,7 +34,9 @@ const HeroSection = ({ onOpenWaitlist }: HeroSectionProps) => {
                 Get Early Access
               </button>
               <a
-                href="mailto:info@fieldservicepros.com"
+                href="https://mail.google.com/mail/?view=cm&to=info@fieldservicepros.com&su=Contact%20Sales%20Inquiry"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="rounded-full border border-gray-200 px-7 py-3 text-sm font-medium text-brand-black transition-colors hover:bg-gray-50"
                 aria-label="Contact our sales team"
               >
