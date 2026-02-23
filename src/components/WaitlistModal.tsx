@@ -16,6 +16,7 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +49,7 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
       const res = await fetch("/api/early-access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userType, firstName, lastName, email, company }),
+        body: JSON.stringify({ userType, firstName, lastName, email, phone, company }),
       });
       if (!res.ok) throw new Error("Submission failed");
       setIsSubmitted(true);
@@ -57,6 +58,7 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
         setFirstName("");
         setLastName("");
         setEmail("");
+        setPhone("");
         setCompany("");
         onClose();
       }, 2000);
@@ -214,6 +216,23 @@ const WaitlistModal = ({ isOpen, onClose }: WaitlistModalProps) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="james@company.com"
+                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors placeholder:text-gray-400 focus:border-brand-black"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="mb-1.5 block text-xs font-medium text-text-secondary"
+                  >
+                    Mobile Number (Optional)
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+1 (555) 000-0000"
                     className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors placeholder:text-gray-400 focus:border-brand-black"
                   />
                 </div>

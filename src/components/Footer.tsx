@@ -64,6 +64,7 @@ const FooterEarlyAccessForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,7 +78,7 @@ const FooterEarlyAccessForm = () => {
       const res = await fetch("/api/early-access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userType, firstName, lastName, email, company }),
+        body: JSON.stringify({ userType, firstName, lastName, email, phone, company }),
       });
       if (!res.ok) throw new Error("Submission failed");
       setIsSubmitted(true);
@@ -93,6 +94,7 @@ const FooterEarlyAccessForm = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
+    setPhone("");
     setCompany("");
     setError("");
   };
@@ -172,11 +174,10 @@ const FooterEarlyAccessForm = () => {
                 <div className="mb-6 flex rounded-full bg-brand-gray p-1">
                   <button
                     onClick={() => setUserType("hiring")}
-                    className={`flex-1 cursor-pointer rounded-full px-4 py-2.5 text-sm font-medium transition-all ${
-                      userType === "hiring"
+                    className={`flex-1 cursor-pointer rounded-full px-4 py-2.5 text-sm font-medium transition-all ${userType === "hiring"
                         ? "bg-white text-brand-black shadow-sm"
                         : "text-text-secondary hover:text-brand-black"
-                    }`}
+                      }`}
                     aria-label="I'm hiring"
                     aria-pressed={userType === "hiring"}
                     tabIndex={0}
@@ -185,11 +186,10 @@ const FooterEarlyAccessForm = () => {
                   </button>
                   <button
                     onClick={() => setUserType("technician")}
-                    className={`flex-1 cursor-pointer rounded-full px-4 py-2.5 text-sm font-medium transition-all ${
-                      userType === "technician"
+                    className={`flex-1 cursor-pointer rounded-full px-4 py-2.5 text-sm font-medium transition-all ${userType === "technician"
                         ? "bg-white text-brand-black shadow-sm"
                         : "text-text-secondary hover:text-brand-black"
-                    }`}
+                      }`}
                     aria-label="I'm a technician"
                     aria-pressed={userType === "technician"}
                     tabIndex={0}
@@ -250,6 +250,23 @@ const FooterEarlyAccessForm = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="james@company.com"
+                      className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors placeholder:text-gray-400 focus:border-brand-black"
+                    />
+                  </motion.div>
+
+                  <motion.div layout>
+                    <label
+                      htmlFor="footer-phone"
+                      className="mb-1.5 block text-xs font-medium text-text-secondary"
+                    >
+                      Mobile Number (Optional)
+                    </label>
+                    <input
+                      id="footer-phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+1 (555) 000-0000"
                       className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-black outline-none transition-colors placeholder:text-gray-400 focus:border-brand-black"
                     />
                   </motion.div>

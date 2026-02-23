@@ -3,7 +3,7 @@ import { getSupabase } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userType, firstName, lastName, email, company } = await req.json();
+    const { userType, firstName, lastName, email, phone, company } = await req.json();
 
     if (!firstName || !lastName || !email || !userType) {
       return NextResponse.json(
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         email: email.trim(),
+        phone: (phone || "").trim(),
         company_name: (company || "").trim(),
       });
       if (error) throw error;
@@ -26,6 +27,7 @@ export async function POST(req: NextRequest) {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         email: email.trim(),
+        phone: (phone || "").trim(),
       });
       if (error) throw error;
     }

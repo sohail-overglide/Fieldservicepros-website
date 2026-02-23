@@ -18,6 +18,7 @@ type ClientRow = {
   first_name: string;
   last_name: string;
   email: string;
+  phone: string;
   company_name: string;
   created_at: string;
 };
@@ -27,6 +28,7 @@ type CandidateRow = {
   first_name: string;
   last_name: string;
   email: string;
+  phone: string;
   created_at: string;
 };
 
@@ -132,10 +134,10 @@ export default function AdminPortalPage() {
     URL.revokeObjectURL(url);
   };
 
-  const clientKeys = ["id", "first_name", "last_name", "email", "company_name", "created_at"];
-  const clientHeaders = ["ID", "First Name", "Last Name", "Email", "Company", "Joined"];
-  const candidateKeys = ["id", "first_name", "last_name", "email", "created_at"];
-  const candidateHeaders = ["ID", "First Name", "Last Name", "Email", "Joined"];
+  const clientKeys = ["id", "first_name", "last_name", "email", "phone", "company_name", "created_at"];
+  const clientHeaders = ["ID", "First Name", "Last Name", "Email", "Phone No.", "Company", "Joined"];
+  const candidateKeys = ["id", "first_name", "last_name", "email", "phone", "created_at"];
+  const candidateHeaders = ["ID", "First Name", "Last Name", "Email", "Phone No.", "Joined"];
 
   const activeRows =
     activeTab === "clients"
@@ -168,21 +170,19 @@ export default function AdminPortalPage() {
           </p>
           <button
             onClick={() => setActiveTab("clients")}
-            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-              activeTab === "clients"
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${activeTab === "clients"
                 ? "bg-[#019446]/10 text-[#019446]"
                 : "text-gray-500 hover:bg-gray-50 hover:text-[#0a0a0a]"
-            }`}
+              }`}
           >
             <Briefcase size={15} />
             Clients
             {clients.length > 0 && (
               <span
-                className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                  activeTab === "clients"
+                className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${activeTab === "clients"
                     ? "bg-[#019446]/15 text-[#019446]"
                     : "bg-gray-100 text-gray-500"
-                }`}
+                  }`}
               >
                 {clients.length}
               </span>
@@ -191,21 +191,19 @@ export default function AdminPortalPage() {
 
           <button
             onClick={() => setActiveTab("candidates")}
-            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
-              activeTab === "candidates"
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${activeTab === "candidates"
                 ? "bg-[#019446]/10 text-[#019446]"
                 : "text-gray-500 hover:bg-gray-50 hover:text-[#0a0a0a]"
-            }`}
+              }`}
           >
             <Users size={15} />
             Candidates
             {candidates.length > 0 && (
               <span
-                className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                  activeTab === "candidates"
+                className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-semibold ${activeTab === "candidates"
                     ? "bg-[#019446]/15 text-[#019446]"
                     : "bg-gray-100 text-gray-500"
-                }`}
+                  }`}
               >
                 {candidates.length}
               </span>
@@ -235,9 +233,8 @@ export default function AdminPortalPage() {
             <p className="text-xs text-gray-400">
               {loading
                 ? "Loading..."
-                : `${activeRows.length} ${
-                    activeRows.length === 1 ? "entry" : "entries"
-                  }`}
+                : `${activeRows.length} ${activeRows.length === 1 ? "entry" : "entries"
+                }`}
             </p>
           </div>
 
